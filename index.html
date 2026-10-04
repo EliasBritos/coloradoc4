@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colorado 32 · Creá tu cuenta</title>
+
+<!-- ==================================================================
+     LA LANDING, GENERADA POR EL CRM
+
+     ESTE ARCHIVO NO SE EDITA A MANO PARA UNA AGENCIA. Es la plantilla:
+     el CRM la sirve reemplazando los {{...}} con los datos de cada
+     agencia, que ya los tiene cargados. Editarla acá cambia la de
+     TODAS, que es justo el punto — antes cada agencia copiaba un HTML
+     y lo tocaba, y arreglar algo significaba avisarle a cada una.
+
+     LO QUE SE REEMPLAZA -la lista que manda esta en el generador-:
+
+       Texto que elige la agencia:  MARCA, TITULO, DESTACADO, BONO
+       Datos del CRM:               CLAVE, CRM, PIXEL
+       Colores, ya calculados:      COLOR, COLOR_VIVO, TINTA_COLOR,
+                                    FONDO, FONDO_ALTO, FONDO_VELO,
+                                    TARJETA, LINEA, TINTA_FONDO,
+                                    TINTA_FONDO_BAJA, TINTA_MARCA,
+                                    VELO_CAMPO
+
+     LAS TINTAS NO SE ELIGEN: se calculan por la luminancia del color
+     que eligio la agencia. Nadie mira el contraste al elegir un color,
+     y la primera que ponga un fondo claro con la tinta clara que venia
+     tiene una landing ilegible sin forma de darse cuenta.
+     ================================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Los completa el CRM. La tinta de cada color NO se elige: se
+       calcula por su luminancia, para que nunca quede texto ilegible
+       sobre un color que alguien eligio sin mirar el contraste. */
+    --rosa: #c22000;
+    --rosa-fuerte: #cd482e;
+    --sobre-rosa: #ffffff;
+    --negro: #000000;
+    --violeta: #121212;
+    --tarjeta: #0b0b0b;
+    --linea: rgba(244, 241, 246, 0.12);
+    --tinta: #f4f1f6;
+    --tinta-baja: rgba(244, 241, 246, 0.62);
+    --verde: #4ade80;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background: var(--negro);
+    color: var(--tinta);
+    font-family: Archivo, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  /* ---------------- LA CINTA DE ARRIBA ----------------
+     Se duplica el contenido y se anima -50%: asi el bucle no tiene
+     salto. Con un solo bloque, al volver a empezar se ve el corte. */
+  .cinta {
+    background: var(--rosa);
+    color: var(--sobre-rosa);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 9px 0;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+
+  .cinta div {
+    display: inline-block;
+    animation: correr 28s linear infinite;
+  }
+
+  .cinta span { padding: 0 22px; }
+
+  @keyframes correr {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cinta div { animation: none; }
+  }
+
+  /* ---------------- EL FONDO EN DIAGONAL ----------------
+     Un solo gradiente y no una imagen: pesa cero y no se pixela. */
+  .fondo {
+    position: relative;
+    min-height: 100vh;
+    background:
+      linear-gradient(107deg, var(--violeta) 0%, var(--violeta) 38%, var(--negro) 38.4%, var(--negro) 100%);
+  }
+
+  .envoltorio {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-block: 26px 70px;
+    padding-inline: 20px;
+  }
+
+  /* ---------------- ENCABEZADO ---------------- */
+  .cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .marca { display: flex; align-items: center; gap: 14px; }
+
+  .logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--rosa);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  .logo svg { width: 22px; height: 22px; }
+
+  .nombre {
+    font-family: 'Archivo Black', Archivo, sans-serif;
+    font-size: 27px;
+    letter-spacing: -0.02em;
+  }
+
+  .divisoria { width: 1px; height: 30px; background: var(--linea); }
+
+  .exclusivo {
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    color: var(--tinta-baja);
+    text-transform: uppercase;
+    line-height: 1.35;
+  }
+
+  .cupos {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--tinta-baja);
+  }
+
+  .punto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--verde);
+    flex: none;
+  }
+
+  /* ---------------- LAS DOS COLUMNAS ---------------- */
+  .columnas {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items: center;
+    margin-top: 72px;
+  }
+
+  .ojal {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11.5px;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--tinta-baja);
+    margin-bottom: 26px;
+  }
+
+  .ojal i { width: 34px; height: 1px; background: var(--tinta-baja); display: block; }
+
+  h1 {
+    font-family: 'Archivo Black', Archivo, sans-serif;
+    font-size: clamp(52px, 8.2vw, 108px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin: 0 0 30px;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  /* El resaltado: una caja rosa detras de la palabra, como un
+     marcador. `inline-block` y no `inline` para que el alto no dependa
+     de la linea. */
+  h1 mark {
+    background: var(--rosa);
+    color: var(--sobre-rosa);
+    display: inline-block;
+    padding: 0.02em 0.1em 0.06em;
+    margin-top: 0.06em;
+  }
+
+  .bajada {
+    font-size: 18px;
+    color: var(--tinta-baja);
+    max-width: 30em;
+    margin: 0 0 34px;
+  }
+
+  .ventajas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 30px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .ventajas li { display: flex; align-items: center; gap: 10px; }
+
+  .tilde {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--linea);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  .tilde svg { width: 11px; height: 11px; }
+
+  /* ---------------- LA TARJETA DEL FORMULARIO ---------------- */
+  .caja { position: relative; }
+
+  .tarjeta {
+    background: var(--tarjeta);
+    border: 1px solid var(--linea);
+    border-radius: 20px;
+    padding: 34px 32px 28px;
+  }
+
+  .paso {
+    font-size: 11.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rosa);
+    margin-bottom: 12px;
+  }
+
+  .tarjeta h2 {
+    font-size: 36px;
+    letter-spacing: -0.025em;
+    margin: 0 0 6px;
+    font-weight: 600;
+  }
+
+  .tarjeta .aclara { color: var(--tinta-baja); margin: 0 0 26px; font-size: 15px; }
+
+  label {
+    display: block;
+    font-size: 10.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--tinta-baja);
+    margin-bottom: 9px;
+  }
+
+  label b { color: var(--tinta); font-weight: 600; }
+
+  .campo { margin-bottom: 20px; }
+
+  input {
+    width: 100%;
+    background: rgba(244, 241, 246, 0.05);
+    border: 1px solid var(--linea);
+    border-radius: 12px;
+    padding: 15px 16px;
+    color: var(--tinta);
+    font: inherit;
+    font-size: 16px; /* 16 o el iPhone hace zoom al enfocar. */
+  }
+
+  input::placeholder { color: rgba(244, 241, 246, 0.34); }
+
+  input:focus-visible {
+    outline: 2px solid var(--rosa);
+    outline-offset: 2px;
+    border-color: transparent;
+  }
+
+  /* El +54 pegado adelante del telefono. */
+  .conPrefijo { display: flex; align-items: center; gap: 0; }
+
+  .prefijo {
+    background: rgba(244, 241, 246, 0.05);
+    border: 1px solid var(--linea);
+    border-right: 0;
+    border-radius: 12px 0 0 12px;
+    padding: 15px 14px;
+    font-size: 16px;
+    color: var(--tinta);
+    flex: none;
+  }
+
+  .conPrefijo input { border-radius: 0 12px 12px 0; }
+
+  button {
+    width: 100%;
+    background: var(--rosa);
+    color: var(--sobre-rosa);
+    border: 0;
+    border-radius: 12px;
+    padding: 18px 20px;
+    font: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: background 0.15s ease;
+  }
+
+  button:hover:not(:disabled) { background: var(--rosa-fuerte); }
+
+  button:disabled { opacity: 0.6; cursor: default; }
+
+  .nota {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 11.5px;
+    color: var(--tinta-baja);
+    margin: 16px 0 0;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .nota svg { width: 12px; height: 12px; flex: none; margin-top: 3px; }
+
+  .sellos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--tinta-baja);
+  }
+
+  .sellos span { display: flex; align-items: center; gap: 7px; }
+
+  .sellos svg { width: 13px; height: 13px; flex: none; }
+
+  /* El error del formulario. Ocupa lugar siempre para que la tarjeta
+     no salte cuando aparece. */
+  .error {
+    color: #ff9d9d;
+    font-size: 13px;
+    margin: 12px 0 0;
+    min-height: 1.3em;
+  }
+
+  /* ---------------- EL SELLO DE LA BONIFICACION ----------
+     Pisa la esquina de la tarjeta. En pantalla chica se va: ahi tapa
+     justo el titulo del formulario. */
+  .sello {
+    position: absolute;
+    top: -46px;
+    right: -30px;
+    width: 152px;
+    height: 152px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(3px);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    line-height: 1.25;
+    z-index: 2;
+  }
+
+  .sello em {
+    display: block;
+    font-style: normal;
+    font-size: 9.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--tinta-baja);
+  }
+
+  .sello strong {
+    display: block;
+    font-family: 'Archivo Black', Archivo, sans-serif;
+    font-size: 40px;
+    letter-spacing: -0.03em;
+    color: var(--rosa);
+    margin-top: 2px;
+  }
+
+  /* ---------------- EN EL TELEFONO ----------------
+     Casi todo el trafico de un aviso entra por aca. */
+  @media (max-width: 900px) {
+    .fondo {
+      background: linear-gradient(168deg, var(--violeta) 0%, var(--negro) 42%);
+    }
+
+    .columnas {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      margin-top: 44px;
+    }
+
+    .sello { display: none; }
+
+    .tarjeta { padding: 28px 22px 24px; }
+
+    .envoltorio { padding-block: 20px 50px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cinta" aria-hidden="true">
+  <div>
+    <span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span><span>BONO 200% · ACCESO INMEDIATO ·</span>
+  </div>
+</div>
+
+<div class="fondo">
+  <div class="envoltorio">
+
+    <header class="cabecera">
+      <div class="marca">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="var(--sobre-rosa)">
+            <path d="M12 1.6l2.1 6.2 6.3 2.2-6.3 2.2-2.1 6.2-2.1-6.2L3.6 10l6.3-2.2z"/>
+            <path d="M19.2 15.6l.9 2.5 2.5.9-2.5.9-.9 2.5-.9-2.5-2.5-.9 2.5-.9z"/>
+          </svg>
+        </div>
+        <div class="nombre">Colorado 32</div>
+        <div class="divisoria" aria-hidden="true"></div>
+        <div class="exclusivo">Acceso<br>exclusivo</div>
+      </div>
+
+      <div class="cupos"><span class="punto" aria-hidden="true"></span> Cupos disponibles hoy</div>
+    </header>
+
+    <main class="columnas">
+
+      <section>
+        <p class="ojal"><i aria-hidden="true"></i> Bienvenido a Colorado 32</p>
+
+        <h1>B0N0 200% DE B1ENVENID4!<br><mark>C4RGÁ</mark></h1>
+
+        <p class="bajada">
+          Elegís tu usuario y la cuenta queda lista en el momento: sin tarjeta, sin trámites y sin
+          costo. El bono del 200% se activa en tu primera carga.
+        </p>
+
+        <ul class="ventajas">
+          <li><span class="tilde" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="#c22000" stroke-width="2"><path d="M2 6.4l2.6 2.6L10 3.4"/></svg></span> Carga en el acto</li>
+          <li><span class="tilde" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="#c22000" stroke-width="2"><path d="M2 6.4l2.6 2.6L10 3.4"/></svg></span> Retiro en el acto</li>
+          <li><span class="tilde" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="#c22000" stroke-width="2"><path d="M2 6.4l2.6 2.6L10 3.4"/></svg></span> Atención 24 horas</li>
+        </ul>
+      </section>
+
+      <section class="caja">
+        <div class="sello" aria-hidden="true">
+          <div>
+            <em>Beneficio de<br>bienvenida</em>
+            <strong>200%</strong>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <p class="paso">01 / Registro</p>
+          <h2>Empezá ahora</h2>
+          <p class="aclara">Solo necesitamos el usuario que querés usar para entrar.</p>
+
+          <form id="alta" novalidate>
+            <div class="campo">
+              <label for="usuario"><b>Elegí tu usuario</b></label>
+              <input id="usuario" name="usuario" autocomplete="username" required minlength="3"
+                     maxlength="16" placeholder="Ej: martin123" enterkeyhint="go">
+            </div>
+
+            <div class="campo">
+              <label for="telefono">Teléfono <span>(opcional)</span></label>
+              <div class="conPrefijo">
+                <span class="prefijo">+54</span>
+                <input id="telefono" name="telefono" type="tel" autocomplete="tel"
+                       inputmode="numeric" placeholder="11 2345 6789">
+              </div>
+            </div>
+
+            <button type="submit" id="boton">
+              <span id="rotulo">Crear mi cuenta</span>
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true">
+                <path d="M3 10h13M11 5l5 5-5 5"/>
+              </svg>
+            </button>
+
+            <p class="error" id="error" role="alert"></p>
+          </form>
+
+          <p class="nota">
+            <svg viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+              <rect x="1" y="6" width="10" height="7" rx="1.6"/>
+              <path d="M3.4 6V4a2.6 2.6 0 015.2 0v2"/>
+            </svg>
+            Tu usuario se usa únicamente para crear y proteger tu cuenta.
+          </p>
+
+          <div class="sellos">
+            <span><svg viewBox="0 0 12 12" fill="none" stroke="#c22000" stroke-width="2"><path d="M2 6.4l2.6 2.6L10 3.4"/></svg> Sin tarjeta</span>
+            <span><svg viewBox="0 0 12 12" fill="none" stroke="#c22000" stroke-width="2"><path d="M2 6.4l2.6 2.6L10 3.4"/></svg> Registro gratis</span>
+            <span><svg viewBox="0 0 12 12" fill="none" stroke="#c22000" stroke-width="2"><path d="M2 6.4l2.6 2.6L10 3.4"/></svg> Datos protegidos</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* Los reemplaza el CRM al servir la pagina. */
+  var CLAVE = 'wc_11a500f57975e97c1b9d615dd729ee00';
+  var CRM = 'https://app.gamixcrm.com';
+  var PIXEL = '';
+
+  /* ==============================================================
+     EL PIXEL, PARA EL PageView
+
+     Es lo UNICO que se dispara desde el navegador. El registro, el
+     comprobante y la compra salen del servidor del CRM, porque pasan
+     cuando esta persona ya cerro la pagina.
+
+     Sin pixel configurado no se carga nada: una agencia que todavia no
+     conecto su publicidad no tiene por que pedirle un archivo a Meta.
+     ============================================================== */
+  if (PIXEL) {
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', PIXEL);
+    fbq('track', 'PageView');
+  }
+
+  /**
+   * QUIEN ES ESTA PERSONA, para el CRM.
+   *
+   * Se guarda y se reusa, y hace DOS cosas:
+   *
+   *   1. Si manda el formulario dos veces -el doble click, el "volver"
+   *      del navegador- NO se le crea una segunda cuenta.
+   *   2. La conversacion que arranca aca es la MISMA que va a tener en
+   *      el chat del casino. Sin esto el operador ve dos fichas de la
+   *      misma persona.
+   *
+   * Es el mismo identificador que usa el widget y con la misma llave:
+   * por eso lleva la clave adentro del nombre.
+   */
+  function visitante() {
+    var llave = 'gamix_visitante_' + CLAVE;
+
+    try {
+      var guardado = localStorage.getItem(llave);
+
+      if (guardado) return guardado;
+    } catch (e) {
+      /* Modo privado. Se sigue sin recordar: lo unico que se pierde es
+         la proteccion contra el doble envio. */
+    }
+
+    var bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+
+    var id = '';
+
+    for (var i = 0; i < bytes.length; i++) id += bytes[i].toString(16).padStart(2, '0');
+
+    try { localStorage.setItem(llave, id); } catch (e) { /* idem */ }
+
+    return id;
+  }
+
+  /** El valor de una cookie, o null. Las de Meta las escribe el pixel. */
+  function cookie(nombre) {
+    var partes = document.cookie.split('; ');
+
+    for (var i = 0; i < partes.length; i++) {
+      if (partes[i].indexOf(nombre + '=') === 0) {
+        return decodeURIComponent(partes[i].slice(nombre.length + 1));
+      }
+    }
+
+    return null;
+  }
+
+  var form = document.getElementById('alta');
+  var boton = document.getElementById('boton');
+  var rotulo = document.getElementById('rotulo');
+  var error = document.getElementById('error');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var usuario = document.getElementById('usuario').value.trim();
+
+    if (usuario.length < 3) {
+      error.textContent = 'Elegí un usuario de al menos 3 letras.';
+      document.getElementById('usuario').focus();
+      return;
+    }
+
+    boton.disabled = true;
+    rotulo.textContent = 'Creando tu cuenta…';
+    error.textContent = '';
+
+    fetch(CRM + '/webchat/' + encodeURIComponent(CLAVE) + '/alta', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        apodo: usuario,
+        telefono: document.getElementById('telefono').value,
+        visitante: visitante(),
+
+        /* DE QUE AVISO VINO. Sin esto el resto no sirve: un evento sin
+           click no se puede pegar a ninguna campania, y la compra se
+           confirma horas despues, cuando esta pagina ya no existe.
+           Se captura aca porque es el unico momento en que estan las
+           dos cosas juntas: quien es y de donde vino. */
+        fbc: cookie('_fbc'),
+        fbp: cookie('_fbp'),
+        fbclid: new URLSearchParams(location.search).get('fbclid'),
+        urlOrigen: location.href
+      })
+    })
+      .then(function (r) {
+        return r.json().then(function (cuerpo) { return { ok: r.ok, cuerpo: cuerpo }; });
+      })
+      .then(function (r) {
+        if (!r.ok || !r.cuerpo.url) {
+          throw new Error(r.cuerpo.message || 'No se pudo crear la cuenta. Probá de nuevo.');
+        }
+
+        /* ACA TERMINA TODO: esa direccion lleva el pase adentro y el
+           sitio la reconoce sola. Cuando llegue, ya esta adentro.
+
+           `replace` y no `href`: asi el "volver" del navegador no trae
+           de nuevo esta pagina con el formulario, que a esta altura ya
+           no tiene nada que hacer. */
+        window.location.replace(r.cuerpo.url);
+      })
+      .catch(function (e) {
+        /* Que pueda volver a intentar: lo peor seria dejar el boton
+           apagado con un cartel que no explica nada. */
+        boton.disabled = false;
+        rotulo.textContent = 'Crear mi cuenta';
+        error.textContent = e.message;
+      });
+  });
+})();
+</script>
+
+</body>
+</html>
